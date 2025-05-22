@@ -1,7 +1,7 @@
 import {base, mainnet} from "viem/chains";
 
 const opActions = await import("@eth-optimism/viem/actions");
-const { depositERC20 } = opActions;
+const { depositERC20, withdrawOptimismERC20 } = opActions;
 import { useState } from "react";
 import {
   useAccount,
@@ -39,11 +39,30 @@ export const ActionButtonList = () => {
     }
   };
 
+  const withdraw = async () => {
+    if (!walletClient || !address) return;
+    try {
+      const withdrawTx = await withdrawOptimismERC20(walletClient, {
+        tokenAddress: l2Token,
+        amount: oneToken,
+        to: address,
+        minGasLimit: 200000,
+      });
+
+      console.log(`Withdrawal transaction hash: ${withdrawTx}`);
+      setTxHash(withdrawTx);
+    }
+    catch (error) {
+      console.error("Withdrawal failed:", error);
+    }
+  }
+
   return (
     isConnected && (
       <>
         <div>
           <button onClick={deposit}>Deposit</button>
+          <button onClick={withdraw}>Withdraw</button>
         </div>
         <div>
           {txHash && (
