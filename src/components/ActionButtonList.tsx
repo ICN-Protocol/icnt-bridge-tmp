@@ -11,7 +11,7 @@ import { parseEther } from "viem";
 
 export const ActionButtonList = () => {
   const { address, isConnected } = useAccount();
-  const { data: walletClient } = useWalletClient({ chainId: mainnet.id });
+  const { data: walletClient } = useWalletClient({ chainId: base.id });
 
   const [txHash, setTxHash] = useState<`0x${string}` | null>(null);
 
