@@ -1,5 +1,5 @@
-const viemChains = await import("viem/chains");
-const { optimismSepolia, sepolia } = viemChains;
+import {base, mainnet} from "viem/chains";
+
 const opActions = await import("@eth-optimism/viem/actions");
 const { depositERC20 } = opActions;
 import { useState } from "react";
@@ -11,12 +11,12 @@ import { parseEther } from "viem";
 
 export const ActionButtonList = () => {
   const { address, isConnected } = useAccount();
-  const { data: walletClient } = useWalletClient({ chainId: sepolia.id });
+  const { data: walletClient } = useWalletClient({ chainId: mainnet.id });
 
   const [txHash, setTxHash] = useState<`0x${string}` | null>(null);
 
-  const l1Token = "0x0000000000000000000000000000000000000000";
-  const l2Token = "0x0000000000000000000000000000000000000000";
+  const l1Token = "0xe5e0b73380181273abCfD88695F52C4D0C825661";
+  const l2Token = "0xE0Cd4cAcDdcBF4f36e845407CE53E87717b6601d";
   const oneToken = parseEther("1");
 
   const deposit = async () => {
@@ -27,7 +27,7 @@ export const ActionButtonList = () => {
         tokenAddress: l1Token,
         remoteTokenAddress: l2Token,
         amount: oneToken,
-        targetChain: optimismSepolia,
+        targetChain: base,
         to: address,
         minGasLimit: 200000,
       });
