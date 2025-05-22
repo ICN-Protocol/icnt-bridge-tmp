@@ -5,13 +5,15 @@ const { depositERC20, withdrawOptimismERC20 } = opActions;
 import { useState } from "react";
 import {
   useAccount,
+  useSwitchChain,
   useWalletClient,
 } from "wagmi";
 import { parseEther } from "viem";
 
 export const ActionButtonList = () => {
-  const { address, isConnected } = useAccount();
-  const { data: walletClient } = useWalletClient({ chainId: base.id });
+  const { address, isConnected, chain } = useAccount();
+  const { data: walletClient } = useWalletClient();
+  const switchChainResult = useSwitchChain();
 
   const [txHash, setTxHash] = useState<`0x${string}` | null>(null);
 
@@ -57,12 +59,31 @@ export const ActionButtonList = () => {
     }
   }
 
+  const handleSwitchChain = async () => {
+    if (!walletClient || !address) return;
+    if (chain?.id !== base.id) {
+      if (switchChainResult.switchChain) {
+        switchChainResult.switchChain({ chainId: base.id });
+      }
+      return;
+    }
+    if (chain?.id === base.id) {
+      if (switchChainResult.switchChain) {
+        switchChainResult.switchChain({ chainId: mainnet.id });
+      }
+      return;
+    }
+  }
+
+      
+
   return (
     isConnected && (
       <>
         <div>
-          <button onClick={deposit}>Deposit</button>
-          <button onClick={withdraw}>Withdraw</button>
+          {chain?.id === mainnet.id && (<button onClick={deposit}>Deposit</button>)}
+          {chain?.id === base.id && (<button onClick={withdraw}>Withdraw</button>)}
+          <button onClick={handleSwitchChain}>Switch</button>
         </div>
         <div>
           {txHash && (
