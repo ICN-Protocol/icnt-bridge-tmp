@@ -17,24 +17,22 @@ const generalConfig = {
   themeMode: 'light' as const,
   themeVariables: {
     '--w3m-accent': '#000000',
-  }
+  },
+  socialEnabled: false
 }
 
 // Create modal
 createAppKit({
   adapters: [wagmiAdapter],
   ...generalConfig,
-  features: {
-    analytics: true // Optional - defaults to your Cloud configuration
-  }
 })
 
 export function App() {
 
   return (
-    <div className={"pages"}>
-      <img src="/reown.svg" alt="Reown" style={{ width: '150px', height: '150px' }} />
-      <h1>AppKit Wagmi React dApp Example</h1>
+    <div className={"pages"} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <img src="https://console.icn.global/token.svg" alt="ICN" style={{  height: '150px', padding: '12px' }}/>
+      <h1>ICNT Bridge</h1>
       <WagmiProvider config={wagmiAdapter.wagmiConfig}>
         <QueryClientProvider client={queryClient}>
             <appkit-button />
